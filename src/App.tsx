@@ -1,8 +1,8 @@
-import Dashboard from "@/pages/dashboard/page";
+import Login from "@/pages/login";
 
 const App = () => (
   <div className="App">
-    <Dashboard />
+    <Login />
   </div>
 );
 
