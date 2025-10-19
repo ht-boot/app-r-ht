@@ -1,14 +1,33 @@
+import { useState } from "react";
 import LoginForm from "./login-form";
-export default function Login() {
+import ForgetPwd from "./forget-pwd";
+import LoginQRcode from "./login-qrcode";
+import LoginMobile from "./login-mobile";
+import RegisterForm from "./register-form";
+import LoginLeft from "./login-left";
+
+export type LoginStateType =
+  | "login"
+  | "register"
+  | "forget"
+  | "mobile"
+  | "QRcode";
+
+export function Login() {
+  const [loginView, setLoginView] = useState<LoginStateType>("login"); // login | register | forget | mobile | qRcode
   return (
     <>
       <div className="flex flex-wrap h-screen">
         <div className="flex-1 max-lg:hidden flex items-center justify-center">
-          left
+          <LoginLeft />
         </div>
         {/* 右侧容器 */}
-        <div className="flex-1 flex flex-col items-center mt-20 mx-auto w-full">
-          <LoginForm />
+        <div className="flex-1 flex flex-col items-center justify-center mx-auto h-[100vh]">
+          <LoginForm show={loginView} setLoginView={setLoginView} />
+          <ForgetPwd show={loginView} setLoginView={setLoginView} />
+          <LoginQRcode show={loginView} setLoginView={setLoginView} />
+          <LoginMobile show={loginView} setLoginView={setLoginView} />
+          <RegisterForm show={loginView} setLoginView={setLoginView} />
         </div>
       </div>
     </>

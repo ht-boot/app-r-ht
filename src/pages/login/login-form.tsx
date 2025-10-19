@@ -22,6 +22,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import type { LoginStateType } from "./index";
 
 const formSchema = z.object({
   account: z.string().min(1, { message: "用户名不能为空。" }),
@@ -30,11 +31,18 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function MyForm() {
+export default function LoginForm({
+  show,
+  setLoginView,
+}: {
+  show: string;
+  setLoginView: (show: LoginStateType) => void;
+}) {
   // 记住我
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  // 定义账号、密码与校验规则
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,6 +51,10 @@ export default function MyForm() {
     },
     mode: "onChange", // 可选， 表示输入时就触发校验
   });
+
+  const loginViewsControls = (value: LoginStateType) => {
+    setLoginView(value);
+  };
 
   function onSubmit(values: FormValues) {
     console.log("提交的数据：", values);
@@ -70,12 +82,13 @@ export default function MyForm() {
       }
     );
   }
+  if (show !== "login") return null;
 
   return (
     <div className="w-[320px]">
       <Form {...form}>
         <div className="flex flex-col items-center justify-center mb-6 font-bold text-[18px]">
-          登录系统 System Ace.
+          登录系统 System Ace. {show}
         </div>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -136,19 +149,20 @@ export default function MyForm() {
               type="button" // 防止表单提交 触发submit事件
               variant="link"
               size="sm"
-              className="cursor-pointer text-[12px]"
+              className="text-[12px]"
+              onClick={() => loginViewsControls("forget")}
             >
               忘记密码?
             </Button>
           </div>
           <>
             {loading ? (
-              <Button disabled className="w-full cursor-pointer">
+              <Button disabled className="w-full">
                 <Spinner />
                 登录中...
               </Button>
             ) : (
-              <Button type="submit" className="w-full cursor-pointer">
+              <Button type="submit" className="w-full">
                 登 录
               </Button>
             )}
@@ -159,7 +173,8 @@ export default function MyForm() {
             <Button
               type="button"
               variant="outline"
-              className="w-full cursor-pointer"
+              className="w-full"
+              onClick={() => loginViewsControls("mobile")}
             >
               <Smartphone />
               手机登录
@@ -167,7 +182,8 @@ export default function MyForm() {
             <Button
               type="button"
               variant="outline"
-              className="w-full cursor-pointer"
+              className="w-full"
+              onClick={() => loginViewsControls("QRcode")}
             >
               <ScanQrCode />
               二维码登录
@@ -184,7 +200,6 @@ export default function MyForm() {
               type="button"
               variant="outline"
               size="icon"
-              className="cursor-pointer"
               onClick={() => toast.error("功能暂未实现。")}
             >
               <Facebook className="w-20 h-20" />
@@ -193,7 +208,6 @@ export default function MyForm() {
               type="button"
               variant="outline"
               size="icon"
-              className="cursor-pointer"
               onClick={() => toast.error("功能暂未实现。")}
             >
               <Chromium />
@@ -202,7 +216,6 @@ export default function MyForm() {
               type="button"
               variant="outline"
               size="icon"
-              className="cursor-pointer"
               onClick={() => toast.error("功能暂未实现。")}
             >
               <Twitter />
@@ -212,7 +225,12 @@ export default function MyForm() {
           {/* 注册 */}
           <div className="text-center text-sm">
             没有账号？
-            <Button type="button" variant="link" className="px-1">
+            <Button
+              type="button"
+              variant="link"
+              className="px-1"
+              onClick={() => loginViewsControls("register")}
+            >
               立即注册
             </Button>
           </div>
