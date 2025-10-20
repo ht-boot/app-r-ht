@@ -36,7 +36,7 @@ export default function LoginForm({
   setLoginView,
 }: {
   show: string;
-  setLoginView: (show: LoginStateType) => void;
+  setLoginView: (value: LoginStateType) => void;
 }) {
   // 记住我
   const [remember, setRemember] = useState(true);
@@ -52,11 +52,13 @@ export default function LoginForm({
     mode: "onChange", // 可选， 表示输入时就触发校验
   });
 
+  if (show !== "login") return null;
+
   const loginViewsControls = (value: LoginStateType) => {
     setLoginView(value);
   };
 
-  function onSubmit(values: FormValues) {
+  const onSubmit = (values: FormValues) => {
     console.log("提交的数据：", values);
     toast.promise<{ name: string }>(
       () =>
@@ -81,8 +83,7 @@ export default function LoginForm({
         },
       }
     );
-  }
-  if (show !== "login") return null;
+  };
 
   return (
     <div className="w-[320px]">

@@ -5,6 +5,7 @@ import LoginQRcode from "./login-qrcode";
 import LoginMobile from "./login-mobile";
 import RegisterForm from "./register-form";
 import LoginLeft from "./login-left";
+import Theme from "@/components/theme";
 
 export type LoginStateType =
   | "login"
@@ -17,8 +18,9 @@ export function Login() {
   const [loginView, setLoginView] = useState<LoginStateType>("login"); // login | register | forget | mobile | qRcode
   return (
     <>
-      <div className="flex flex-wrap h-screen">
-        <div className="flex-1 max-lg:hidden flex items-center justify-center">
+      <div className="flex flex-wrap h-screen items-center">
+        <Theme />
+        <div className="flex-1 max-lg:hidden">
           <LoginLeft />
         </div>
         {/* 右侧容器 */}

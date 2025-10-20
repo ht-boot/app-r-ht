@@ -33,13 +33,13 @@ const formSchema = z
   });
 type FormValues = z.infer<typeof formSchema>;
 
-export default function RegisterForm({
+const RegisterForm = ({
   show,
   setLoginView,
 }: {
   show: LoginStateType;
   setLoginView: (view: LoginStateType) => void;
-}) {
+}) => {
   // 定义账号、密码与校验规则
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -53,13 +53,12 @@ export default function RegisterForm({
     mode: "onChange", // 可选， 表示输入时就触发校验
   });
 
+  if (show !== "register") return null;
+
   const onRegister = async (values: any) => {
     // TODO: 注册逻辑
     console.log(values);
   };
-
-  if (show !== "register") return null;
-
   return (
     <div className="w-[320px]">
       <Form {...form}>
@@ -159,4 +158,5 @@ export default function RegisterForm({
       </Form>
     </div>
   );
-}
+};
+export default RegisterForm;

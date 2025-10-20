@@ -1,12 +1,13 @@
+// import { useLoginView } from "./index";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftToLine } from "lucide-react";
 import type { LoginStateType } from "./index";
 
-export default function BackLogin({
+const BackLogin = ({
   setLoginView,
 }: {
   setLoginView: (view: LoginStateType) => void;
-}) {
+}) => {
   const goBack = () => {
     setLoginView("login");
   };
@@ -21,4 +22,5 @@ export default function BackLogin({
       <ArrowLeftToLine /> 返回登录
     </Button>
   );
-}
+};
+export default BackLogin;

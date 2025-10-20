@@ -1,0 +1,64 @@
+.icons-container {
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.icons-container .button {
+  font-size: 14px;
+  text-transform: uppercase;
+
+  border-radius: 24px;
+  height: 48px;
+  gap: 5px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  width: max-content;
+}
+.icons-container .button1 {
+  background-color: #232323;
+}
+.icons-container .button2 {
+  border: 1px solid #323232;
+}
+
+.icons-container .button img {
+  width: 22px;
+  height: auto;
+  display: block;
+}
+
+.icons-container .icons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1vw;
+}
+.icons-container .icons img {
+  width: 8vw;
+  height: 8vw;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .icons-container .header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .icons-container .header div:nth-child(2) {
+    display: none;
+  }
+  .icons-container .icons {
+    gap: 2vw;
+  }
+  .icons-container .icons img {
+    width: 18vw;
+    height: 18vw;
+  }
+}

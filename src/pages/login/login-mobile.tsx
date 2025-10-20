@@ -19,21 +19,20 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 // 定义手机号、验证码与校验规则
 const LoginMobileSchema = z.object({
   phone: z.string().regex(/^1[3-9]\d{9}$/, { message: "请输入正确的手机号" }),
   verifyCode: z.string().min(6, { message: "请输入验证码" }).max(6),
 });
-
-export default function LoginMobile({
+const LoginMobile = ({
   show,
   setLoginView,
 }: {
   show: LoginStateType;
   setLoginView: (value: LoginStateType) => void;
-}) {
+}) => {
   const form = useForm<z.infer<typeof LoginMobileSchema>>({
     resolver: zodResolver(LoginMobileSchema),
     defaultValues: {
@@ -45,6 +44,9 @@ export default function LoginMobile({
 
   const [isSending, setIsSending] = useState(false);
   const [seconds, setSeconds] = useState(60);
+
+  if (show !== "mobile") return null;
+
   /**
    * 发送验证码的函数
    * 该函数处理验证码发送的逻辑，包括设置发送状态和倒计时功能
@@ -65,11 +67,9 @@ export default function LoginMobile({
       });
     }, 1000);
   };
-
   const onSubmit = (data: z.infer<typeof LoginMobileSchema>) => {
     console.log(data);
   };
-  if (show !== "mobile") return null;
   return (
     <>
       <Form {...form}>
@@ -135,4 +135,5 @@ export default function LoginMobile({
       <BackLogin setLoginView={setLoginView} /> {/* 返回登录 */}
     </>
   );
-}
+};
+export default memo(LoginMobile);

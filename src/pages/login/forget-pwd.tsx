@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { LoginStateType } from "./index";
 import BackLogin from "./back-login";
+import { memo } from "react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "请输入合法的邮箱地址。" }),
@@ -19,13 +20,13 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function ForgetPwd({
+const ForgetPwd = ({
   show,
   setLoginView,
 }: {
   show: LoginStateType;
   setLoginView: (show: LoginStateType) => void;
-}) {
+}) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,12 +34,11 @@ export default function ForgetPwd({
     },
     mode: "onChange", // 可选， 表示输入时就触发校验
   });
-
+  if (show !== "forget") return null;
   const sendEmail = (values: FormValues) => {
     console.log(values);
   };
 
-  if (show !== "forget") return null;
   return (
     <div className="w-[320px] max-h-max">
       <div className="mb-8 text-center">
@@ -73,4 +73,5 @@ export default function ForgetPwd({
       </Form>
     </div>
   );
-}
+};
+export default memo(ForgetPwd);

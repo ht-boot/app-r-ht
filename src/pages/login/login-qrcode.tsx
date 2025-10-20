@@ -1,13 +1,13 @@
 import type { LoginStateType } from "./index";
 import { QRCodeSVG } from "qrcode.react";
 import BackLogin from "./back-login";
-export default function LoginQRcode({
+const LoginQRcode = ({
   show,
   setLoginView,
 }: {
   show: LoginStateType;
   setLoginView: (view: LoginStateType) => void;
-}) {
+}) => {
   if (show !== "QRcode") return null;
   return (
     <>
@@ -21,4 +21,5 @@ export default function LoginQRcode({
       </div>
     </>
   );
-}
+};
+export default LoginQRcode;
