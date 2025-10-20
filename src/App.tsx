@@ -1,9 +1,14 @@
-import { Login } from "@/pages/login";
+import { Routes } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner";
+import { generateRoutes, generateRouteElements } from "./router";
+import { menuList } from "./api";
+
+// 生成路由配置
+const routes = generateRoutes(menuList);
 
 const App = () => (
   <div className="App">
-    <Login />
+    <Routes>{generateRouteElements(routes)}</Routes>
     <Toaster
       position="top-right" // top-left, top-center, bottom-right, bottom-left, bottom-center
       toastOptions={{

@@ -14,7 +14,7 @@ export type LoginStateType =
   | "mobile"
   | "QRcode";
 
-export function Login() {
+const Login = () => {
   const [loginView, setLoginView] = useState<LoginStateType>("login"); // login | register | forget | mobile | qRcode
   return (
     <>
@@ -34,4 +34,5 @@ export function Login() {
       </div>
     </>
   );
-}
+};
+export default Login;

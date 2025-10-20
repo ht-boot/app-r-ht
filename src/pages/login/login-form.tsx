@@ -75,7 +75,7 @@ export default function LoginForm({
         loading: "系统登录中， 请稍后...",
         success: (data) => {
           setLoading(false);
-          return `登录成功！${data.name}`;
+          return `${data.name}`;
         },
         error: (err) => {
           setLoading(false);

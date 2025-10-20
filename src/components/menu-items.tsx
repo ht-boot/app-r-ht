@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -11,18 +11,14 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 
-export interface MenuItemType {
-  name: string;
-  url: string;
-  icon?: LucideIcon;
-  isActive?: boolean;
-  level?: number;
-  children?: MenuItemType[];
-}
+import type { RouteType } from "@/router";
+
+import { useNavigate } from "react-router-dom";
 
 // 递归渲染菜单项
-export const MenuItem = ({ items }: { items: MenuItemType[] }) => {
-  const [openMenuMap, setOpenMenuMap] = useState<string[]>([items[0].name]); // 默认展开第一个菜单项
+export const MenuItem = ({ items }: { items: RouteType[] }) => {
+  const [openMenuMap, setOpenMenuMap] = useState<string[]>([]); // 默认展开第一个菜单项
+  const navigate = useNavigate(); // 导航到指定路径
   const onToggleMenu = (name: string) => {
     setOpenMenuMap((prev) => {
       // 使用展开运算符创建新的数组，并添加或移除 name
@@ -39,26 +35,32 @@ export const MenuItem = ({ items }: { items: MenuItemType[] }) => {
   };
 
   return items.map((item) => (
-    <Collapsible key={item.name} asChild open={openMenuMap.includes(item.name)}>
+    <Collapsible key={item.path} asChild open={openMenuMap.includes(item.path)}>
       <SidebarMenuItem>
         {item.children && item.children.length > 0 ? (
-          <CollapsibleTrigger asChild onClick={() => onToggleMenu(item.name)}>
+          <CollapsibleTrigger asChild onClick={() => onToggleMenu(item.path)}>
             <SidebarMenuButton
               tooltip={item.name}
-              className="w-full cursor-pointer justify-between"
+              className="text-nowrap cursor-pointer justify-between overflow-hidden"
             >
               {item.icon && <item.icon />}
               <span>{item.name}</span>
               <ChevronRight
                 className={`ml-auto transition-transform duration-200 ${
-                  openMenuMap.includes(item.name) ? "rotate-90" : "rotate-0"
+                  openMenuMap.includes(item.path) ? "rotate-90" : "rotate-0"
                 }`}
               />
             </SidebarMenuButton>
           </CollapsibleTrigger>
         ) : (
           // 没有子菜单时，直接渲染链接
-          <SidebarMenuButton tooltip={item.name} className="cursor-pointer">
+          <SidebarMenuButton
+            tooltip={item.name}
+            className="cursor-pointer"
+            onClick={() => {
+              navigate(item.path);
+            }}
+          >
             {item.icon && <item.icon />}
             <span>{item.name}</span>
           </SidebarMenuButton>
