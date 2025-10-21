@@ -23,6 +23,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import type { LoginStateType } from "./index";
+import { useNavigate } from "react-router-dom";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const formSchema = z.object({
   account: z.string().min(1, { message: "用户名不能为空。" }),
@@ -41,6 +43,10 @@ export default function LoginForm({
   // 记住我
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { setItem } = useLocalStorage();
 
   // 定义账号、密码与校验规则
   const form = useForm<FormValues>({
@@ -75,6 +81,8 @@ export default function LoginForm({
         loading: "系统登录中， 请稍后...",
         success: (data) => {
           setLoading(false);
+          setItem("token", "1234567890");
+          navigate("/", { replace: true });
           return `${data.name}`;
         },
         error: (err) => {

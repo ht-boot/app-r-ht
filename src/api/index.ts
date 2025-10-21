@@ -4,16 +4,16 @@ import type { RouteType } from "@/router";
 export const menuList: RouteType[] = [
   {
     name: "Home",
-    path: "/",
+    path: "/home",
     children: [
       {
         name: "Home",
-        path: "/",
+        path: "/home/home1",
         element: "Home",
       },
       {
         name: "Home1",
-        path: "/home1",
+        path: "/home/home2",
         element: "Home1",
       },
     ],
