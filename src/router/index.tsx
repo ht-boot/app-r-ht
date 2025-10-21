@@ -1,7 +1,6 @@
-import { Home } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Route } from "react-router-dom";
-import routerPaths from "./routers";
+import routerPaths from "./routes";
 
 export type MetaType = {
   title?: string;
@@ -9,37 +8,51 @@ export type MetaType = {
 };
 
 export type RouteType = {
-  path?: string;
-  name?: string;
+  path: string;
+  name: string;
   icon?: LucideIcon; // 图标
   element?: string;
   meta?: MetaType[];
   children?: RouteType[]; // 子路由
 };
+// 递归扁平化路由
+const flattenRoutes = (
+  routes: RouteType[],
+  acc: RouteType[] = []
+): RouteType[] => {
+  routes.forEach((route) => {
+    if (route.children && route.children.length > 0) {
+      flattenRoutes(route.children, acc);
+    } else {
+      acc.push(route);
+    }
+  });
+
+  return acc;
+};
 
 // 主函数，用于生成最终的路由配置数组
 export const generateRoutes = (dynamicRoutes: RouteType[]) => {
-  const finalDynamicRoutes = Array.isArray(dynamicRoutes) ? dynamicRoutes : [];
+  const finalDynamicRoutes = flattenRoutes(dynamicRoutes);
+
   const routes = [
     {
       path: "/",
       name: "首页",
-      icon: Home,
       element: "Layout", // 这里使用字符串来表示组件，实际使用时需要根据字符串来动态加载组件
       children: [...finalDynamicRoutes],
     },
     {
       path: "/login",
-      element: "Login", // 这里使用字符串来表示组件，实际使用时需要根据字符串来动态加载组件
+      name: "登录",
+      element: "Login",
     },
     {
       path: "*",
-      element: "404", // 这里使用字符串来表示组件，实际使用时需要根据字符串来动态加载组件
+      name: "404",
+      element: "404",
     },
   ];
-
-  console.log(routes, "routes");
-
   return routes;
 };
 
@@ -47,17 +60,23 @@ export const generateRoutes = (dynamicRoutes: RouteType[]) => {
 export const generateRouteElements = (
   routes: RouteType[]
 ): React.ReactNode[] => {
-  return routes.map((route) => {
-    const Element = routerPaths[route.element as string];
+  return routes
+    .map((route) => {
+      if (!route.path || !route.element) return null;
 
-    if (route.children) {
-      return (
-        <Route key={route.path} path={route.path} element={<Element />}>
-          {generateRouteElements(route.children)}
-        </Route>
-      );
-    } else {
-      return <Route key={route.path} path={route.path} element={<Element />} />;
-    }
-  });
+      const Element = routerPaths[route.element];
+
+      if (route.children) {
+        return (
+          <Route key={route.path} path={route.path} element={<Element />}>
+            {generateRouteElements(route.children)}
+          </Route>
+        );
+      } else {
+        return (
+          <Route key={route.path} path={route.path} element={<Element />} />
+        );
+      }
+    })
+    .filter(Boolean);
 };

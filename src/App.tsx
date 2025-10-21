@@ -6,6 +6,8 @@ import { menuList } from "./api";
 // 生成路由配置
 const routes = generateRoutes(menuList);
 
+console.log(routes, "routes");
+
 const App = () => (
   <div className="App">
     <Routes>{generateRouteElements(routes)}</Routes>

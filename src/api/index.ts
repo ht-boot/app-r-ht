@@ -5,17 +5,16 @@ export const menuList: RouteType[] = [
   {
     name: "Home",
     path: "/",
-    element: "Home",
     children: [
+      {
+        name: "Home",
+        path: "/",
+        element: "Home",
+      },
       {
         name: "Home1",
         path: "/home1",
         element: "Home1",
-      },
-      {
-        name: "Home2",
-        path: "/home2",
-        element: "Home2",
       },
     ],
   },

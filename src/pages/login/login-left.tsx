@@ -53,6 +53,15 @@ const LoginLeft: React.FC = () => {
      * * @param tag 标记值，用于区分不同的动画效果。
      */
     function animateMedia(el: HTMLDivElement, tag: boolean = true) {
+      let xAxis = delta.current.x * 30;
+      let yAxis = delta.current.y * 30;
+      let multiple = 1.2;
+      if (!tag) {
+        xAxis = (Math.random() - 0.5) * 20000;
+        yAxis = (Math.random() - 0.5) * 10000;
+        multiple = 0.5;
+      }
+
       // 1. 元素查找与检查
       const image = el.querySelector<HTMLImageElement>("img");
       // 如果没有找到图片元素，则立即退出函数，避免运行时错误。
@@ -68,14 +77,9 @@ const LoginLeft: React.FC = () => {
       });
 
       // 3. 速度调整
-      // 将整个时间线的播放速度设置为 1.2 倍使动画更轻快。
-      tl.timeScale(1.2);
-      let xAxis = delta.current.x * 30;
-      let yAxis = delta.current.y * 30;
-      if (!tag) {
-        xAxis = (Math.random() - 0.5) * 20000;
-        yAxis = (Math.random() - 0.5) * 10000;
-      }
+
+      tl.timeScale(multiple);
+
       // 4. 惯性平移动画 (需要 GSAP InertiaPlugin)
       tl.to(image, {
         // 使用 InertiaPlugin 实现惯性效果，常用于模拟拖拽释放后的平滑减速。
@@ -90,13 +94,13 @@ const LoginLeft: React.FC = () => {
       // 5. 随机旋转摇摆动画
       tl.fromTo(
         image,
-        { rotate: 0 }, // 从 0 度开始
+        {}, // 从 0 度开始
         {
           duration: 0.6, // 动画时长为 0.4 秒
           // 目标旋转角度：计算一个 -15 到 +15 度之间的随机角度。
           rotate: (Math.random() - 0.5) * 180,
           yoyo: true, // 启用“往返”模式，动画会反向播放。
-          repeat: 1, // 往返一次，即：0 -> 随机角度 -> 0。
+          repeat: 0, // 往返一次，即：0 -> 随机角度 -> 0。
           ease: "power1.inOut",
         },
         // 相对位置参数：
@@ -117,8 +121,8 @@ const LoginLeft: React.FC = () => {
     >
       <div className="icons">
         {iconArr.map((src, idx) => (
-          <div className="icon" key={idx}>
-            <img src={src} alt={`icon-${idx + 1}`} />
+          <div className="icon size-25" key={idx}>
+            <img className="size-25" src={src} alt={`icon-${idx + 1}`} />
           </div>
         ))}
       </div>

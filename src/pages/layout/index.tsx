@@ -13,7 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet } from "react-router-dom";
+import ProtectedRoute from "@/router/protected-router";
 
 export default function Layout() {
   return (
@@ -42,8 +42,8 @@ export default function Layout() {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <Outlet />
+        <div className="gap-4 p-4 pt-0">
+          <ProtectedRoute />
         </div>
       </SidebarInset>
     </SidebarProvider>

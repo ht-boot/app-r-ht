@@ -25,20 +25,12 @@
   border: 1px solid #323232;
 }
 
-.icons-container .button img {
-  width: 22px;
-  height: auto;
-  display: block;
-}
-
 .icons-container .icons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1vw;
 }
 .icons-container .icons img {
-  width: 8vw;
-  height: 8vw;
   object-fit: contain;
   display: block;
   pointer-events: none;
