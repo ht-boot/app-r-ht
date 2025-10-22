@@ -1,6 +1,15 @@
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import type { LoginStateType } from "./index";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormField,
@@ -10,105 +19,97 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Smartphone,
   ScanQrCode,
   Facebook,
-  Chromium,
   Twitter,
+  Chrome,
 } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
-import type { LoginStateType } from "./index";
-import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const formSchema = z.object({
-  account: z.string().min(1, { message: "用户名不能为空。" }),
-  password: z.string().min(1, { message: "密码不能为空。" }),
+  account: z.string().min(1, { message: "请输入账号" }),
+  password: z.string().min(1, { message: "请输入密码" }),
+  remember: z.boolean().default(true).optional(),
 });
+
+const socialLogins = [
+  { Icon: Facebook, name: "Facebook" },
+  { Icon: Chrome, name: "Google" },
+  { Icon: Twitter, name: "Twitter" },
+];
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function LoginForm({
+const LoginForm = ({
   show,
   setLoginView,
 }: {
   show: string;
   setLoginView: (value: LoginStateType) => void;
-}) {
-  // 记住我
-  const [remember, setRemember] = useState(true);
-  const [loading, setLoading] = useState(false);
-
+}) => {
   const navigate = useNavigate();
-
   const { setItem } = useLocalStorage();
 
-  // 定义账号、密码与校验规则
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       account: "",
       password: "",
+      remember: true,
     },
-    mode: "onChange", // 可选， 表示输入时就触发校验
+    mode: "onChange",
   });
+
+  const { isSubmitting } = form.formState;
+
+  const handleViewChange = useCallback(
+    (view: LoginStateType) => {
+      setLoginView(view);
+    },
+    [setLoginView]
+  );
+
+  const onSubmit = async (values: FormValues) => {
+    console.log("Submitted Data:", values); //
+
+    const loginPromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        Math.random() > 0.1
+          ? resolve({ name: "Login Successful!" })
+          : reject(new Error("Login Failed!"));
+      }, 1500);
+    });
+
+    toast.promise(loginPromise, {
+      loading: "Logging in, please wait...",
+      success: (data: any) => {
+        setItem("token", "1234567890");
+        navigate("/", { replace: true });
+        return `${data.name}`;
+      },
+      error: (err) => `${err.message}`,
+    });
+  };
 
   if (show !== "login") return null;
 
-  const loginViewsControls = (value: LoginStateType) => {
-    setLoginView(value);
-  };
-
-  const onSubmit = (values: FormValues) => {
-    console.log("提交的数据：", values);
-    toast.promise<{ name: string }>(
-      () =>
-        new Promise((resolve, reject) => {
-          setLoading(true);
-          setTimeout(() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            Math.random() > 0.1
-              ? resolve({ name: "登录成功！" })
-              : reject(new Error("登录失败！"));
-          }, 2000);
-        }),
-      {
-        loading: "系统登录中， 请稍后...",
-        success: (data) => {
-          setLoading(false);
-          setItem("token", "1234567890");
-          navigate("/", { replace: true });
-          return `${data.name}`;
-        },
-        error: (err) => {
-          setLoading(false);
-          return `${err.message}`;
-        },
-      }
-    );
-  };
-
   return (
     <div className="w-[320px]">
+      <div className="mb-6 text-center text-lg font-bold">系统登录 Ace.</div>
       <Form {...form}>
-        <div className="flex flex-col items-center justify-center mb-6 font-bold text-[18px]">
-          登录系统 System Ace. {show}
-        </div>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="account"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>用户名</FormLabel>
+                <FormLabel>账户</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="请输入用户名"
+                    placeholder="请输入你的账户"
                     {...field}
                     autoComplete="username"
                   />
@@ -126,125 +127,105 @@ export default function LoginForm({
                 <FormControl>
                   <Input
                     type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    placeholder="请输入密码"
+                    placeholder="请输入你的密码"
                     {...field}
+                    autoComplete="current-password"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/* 记住我/忘记密码 */}
-          <div className="flex flex-row justify-between">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                className="cursor-pointer"
-                id="remember"
-                checked={remember}
-                onCheckedChange={(checked) =>
-                  setRemember(checked === "indeterminate" ? false : checked)
-                }
-              />
-              <label
-                htmlFor="remember"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-              >
-                记住我
-              </label>
-            </div>
+
+          <div className="flex items-center justify-between">
+            <FormField
+              control={form.control}
+              name="remember"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-2">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel className="!mt-0 cursor-pointer">记住我</FormLabel>
+                </FormItem>
+              )}
+            />
             <Button
-              type="button" // 防止表单提交 触发submit事件
+              type="button"
               variant="link"
               size="sm"
-              className="text-[12px]"
-              onClick={() => loginViewsControls("forget")}
+              className="text-xs"
+              onClick={() => handleViewChange("forget")}
             >
               忘记密码?
             </Button>
           </div>
-          <>
-            {loading ? (
-              <Button disabled className="w-full">
-                <Spinner />
-                登录中...
-              </Button>
-            ) : (
-              <Button type="submit" className="w-full">
-                登 录
-              </Button>
-            )}
-          </>
 
-          {/* 手机登录/二维码登录 */}
-          <div className="grid gap-4 sm:grid-cols-2">
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting && <Spinner className="mr-2" />}
+            {isSubmitting ? "登录中..." : "登录"}
+          </Button>
+
+          <div className="grid grid-cols-2 gap-4">
             <Button
               type="button"
               variant="outline"
-              className="w-full"
-              onClick={() => loginViewsControls("mobile")}
+              onClick={() => handleViewChange("mobile")}
             >
-              <Smartphone />
-              手机登录
+              <Smartphone className="mr-2 h-4 w-4" /> 手机登录
             </Button>
             <Button
               type="button"
               variant="outline"
-              className="w-full"
-              onClick={() => loginViewsControls("QRcode")}
+              onClick={() => handleViewChange("QRcode")}
             >
-              <ScanQrCode />
-              二维码登录
-            </Button>
-          </div>
-          {/* 其他登录方式 */}
-          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">
-              其他登录方式
-            </span>
-          </div>
-          <div className="flex  justify-around text-2xl">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => toast.error("功能暂未实现。")}
-            >
-              <Facebook className="w-20 h-20" />
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => toast.error("功能暂未实现。")}
-            >
-              <Chromium />
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => toast.error("功能暂未实现。")}
-            >
-              <Twitter />
+              <ScanQrCode className="mr-2 h-4 w-4" /> 二维码登录
             </Button>
           </div>
 
-          {/* 注册 */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                其他登录方式
+              </span>
+            </div>
+          </div>
+
+          <div className="flex justify-around">
+            {socialLogins.map(({ Icon, name }) => (
+              <Button
+                key={name}
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => toast.error(`${name} 登录方式未开放。`)}
+              >
+                <Icon className="h-5 w-5" />
+              </Button>
+            ))}
+          </div>
+
           <div className="text-center text-sm">
             没有账号？
             <Button
               type="button"
               variant="link"
               className="px-1"
-              onClick={() => loginViewsControls("register")}
+              onClick={() => handleViewChange("register")}
             >
-              立即注册
+              去注册
             </Button>
           </div>
         </form>
       </Form>
     </div>
   );
-}
+};
+
+export default LoginForm;
