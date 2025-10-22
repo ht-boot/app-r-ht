@@ -16,6 +16,11 @@ export const menuList: RouteType[] = [
         path: "/system/auth",
         element: "auth",
       },
+      {
+        name: "图标管理",
+        path: "/system/icon",
+        element: "icon",
+      },
     ],
   },
   {
