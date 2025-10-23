@@ -11,9 +11,15 @@ const routerPaths: RoutesType = {
   Layout,
   Login,
   404: NotFind, // 404页面
-  Home: React.lazy(() => import("@/pages/home")),
+  home: React.lazy(() => import("@/pages/home")),
   menu: React.lazy(() => import("@/pages/system/menu")),
   icon: React.lazy(() => import("@/pages/system/icon")),
+  user: React.lazy(() => import("@/pages/user/user")),
+  role: React.lazy(() => import("@/pages/user/role")),
+  profile: React.lazy(() => import("@/pages/user/profile")),
+  fileUpload: React.lazy(() => import("@/pages/file/file-upload")),
+  task: React.lazy(() => import("@/pages/task")),
+  auth: React.lazy(() => import("@/pages/system/auth")),
 };
 
 export default routerPaths;

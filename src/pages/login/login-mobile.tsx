@@ -19,7 +19,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
-import { useState, memo } from "react";
+import { useState, memo, useCallback } from "react";
 
 // 定义手机号、验证码与校验规则
 const LoginMobileSchema = z.object({
@@ -45,13 +45,11 @@ const LoginMobile = ({
   const [isSending, setIsSending] = useState(false);
   const [seconds, setSeconds] = useState(60);
 
-  if (show !== "mobile") return null;
-
   /**
    * 发送验证码的函数
    * 该函数处理验证码发送的逻辑，包括设置发送状态和倒计时功能
    */
-  const sendVerifyCode = () => {
+  const sendVerifyCode = useCallback(() => {
     // 设置正在发送的状态为true
     setIsSending(true);
     const timer = setInterval(() => {
@@ -66,7 +64,10 @@ const LoginMobile = ({
         return prev - 1;
       });
     }, 1000);
-  };
+  }, []); // 依赖项数组为空，表示只在组件挂载时执行一次
+
+  if (show !== "mobile") return null;
+
   const onSubmit = (data: z.infer<typeof LoginMobileSchema>) => {
     console.log(data);
   };

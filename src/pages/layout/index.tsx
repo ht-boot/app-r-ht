@@ -44,7 +44,14 @@ export default function Layout() {
           </div>
           <Theme />
         </header>
-        <div className="gap-4 p-3">
+        <div
+          className="gap-4 p-3"
+          style={{
+            height: "calc(100vh - 64px)",
+            overflowY: "scroll",
+            paddingBottom: "20px",
+          }}
+        >
           <ProtectedRoute />
         </div>
       </SidebarInset>

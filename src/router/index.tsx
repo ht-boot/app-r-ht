@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-react";
 import { Route } from "react-router-dom";
 import routerPaths from "./routes";
 
@@ -10,7 +9,7 @@ export type MetaType = {
 export type RouteType = {
   path: string;
   name: string;
-  icon?: LucideIcon; // 图标
+  icon?: string; // 图标
   element?: string;
   meta?: MetaType[];
   children?: RouteType[]; // 子路由

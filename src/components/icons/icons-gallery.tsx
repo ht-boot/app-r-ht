@@ -7,22 +7,47 @@ type LucideIconComponent = React.FC<lucideIcons.LucideProps>;
 
 // --- 图标过滤逻辑 ---
 const CATEGORY_KEYWORDS = [
-  "User",
-  "Account",
-  "CircleUser",
-  "Profile",
-  "Access",
-  "Lock",
-  "Key",
+  "ScanFace",
+  "Instagram",
   "LogOut",
   "LogIn",
-  "Shield",
   "Settings",
   "Fingerprint",
-  "Wallet",
+  "WalletMinimalIcon",
   "CreditCard",
   "Arrows",
-  "Menu",
+  "MenuIcon",
+  "LaptopMinimalCheck",
+  "LayoutDashboard",
+  "FigmaIcon",
+  "Store",
+  "ChartBarBigIcon",
+  "ChartPieIcon",
+  "UserRound",
+  "UserPlus",
+  "UserRoundPen",
+  "BotMessageSquareIcon",
+  "CodeXmlIcon",
+  "SquarePlay",
+  "BadgeDollarSignIcon",
+  "BadgeEuroIcon",
+  "BadgeJapaneseYenIcon",
+  "ScanBarcode",
+  "ScanQrCode",
+  "KeySquare",
+  "Video",
+  "BellRing",
+  "Vibrate",
+  "MapPinCheck",
+  "AudioWaveform",
+  "Paperclip",
+  "Trash2",
+  "SquareSplitHorizontal",
+  "Gamepad2",
+  "Hamburger",
+  "Milk",
+  "AppleIcon",
+  "CloudUploadIcon",
 ];
 
 const getFilteredIcons = (): [string, LucideIconComponent][] => {
@@ -48,6 +73,8 @@ const getFilteredIcons = (): [string, LucideIconComponent][] => {
     .sort((a, b) => a[0].localeCompare(b[0]));
 };
 
+export const IconArrCollection = getFilteredIcons();
+
 // ---  IconsGallery 组件 ---
 const IconsGallery: React.FC = () => {
   // 获取过滤后的图标列表
@@ -70,8 +97,8 @@ const IconsGallery: React.FC = () => {
   }, [searchTerm, initialIcons]); // 仅当搜索词或初始列表变化时才重新计算
 
   return (
-    <div className="container mx-auto p-4 sm:p-6">
-      <h1 className="text-3xl font-extrabold mb-4 text-gray-800">
+    <div className="container mx-auto p-2 sm:p-2">
+      <h1 className="text-3xl font-extrabold mb-4">
         图标列表 ({initialIcons.length} 个)
       </h1>
 
@@ -87,7 +114,6 @@ const IconsGallery: React.FC = () => {
             key={iconName}
             Icon={IconComponent}
             copyContent={iconName}
-            className="text-gray-700"
           />
         ))}
       </div>
