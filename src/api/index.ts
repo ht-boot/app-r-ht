@@ -4,7 +4,7 @@ import type { RouteType } from "@/router";
 export const menuList: RouteType[] = [
   {
     name: "首页",
-    path: "/home",
+    path: "/",
     icon: "LayoutDashboard",
     element: "home",
   },
@@ -70,5 +70,11 @@ export const menuList: RouteType[] = [
     path: "/fileUpload",
     icon: "CloudUploadIcon",
     element: "fileUpload",
+  },
+  {
+    name: "动画管理",
+    path: "/animate",
+    icon: "Gamepad2Icon",
+    element: "animate",
   },
 ];

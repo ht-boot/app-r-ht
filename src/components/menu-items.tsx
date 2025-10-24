@@ -85,15 +85,13 @@ export const MenuItem = ({ items }: { items: RouteType[] }) => {
             <SidebarMenuButton
               tooltip={item.name}
               className={`text-nowrap hover:bg-primary/12 hover:text-primary active:bg-primary/10! active:text-primary! cursor-pointer transition-all overflow-hidden ${
-                isActive
-                  ? " dark:bg-gray-700 bg-primary/28 text-primary font-semibold"
-                  : "" //  应用高亮
+                isActive ? "bg-primary/28 text-primary font-semibold" : "" //  应用高亮
               }`}
               onClick={() => {
                 navigate(item.path);
               }}
             >
-              {item.icon && <Icon name={item.icon} className="size-20" />}
+              {item.icon && <Icon name={item.icon} size={18} />}
               <span className="pl-3">{item.name}</span>
             </SidebarMenuButton>
           )}

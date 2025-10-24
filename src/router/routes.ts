@@ -20,6 +20,7 @@ const routerPaths: RoutesType = {
   fileUpload: React.lazy(() => import("@/pages/file/file-upload")),
   task: React.lazy(() => import("@/pages/task")),
   auth: React.lazy(() => import("@/pages/system/auth")),
+  animate: React.lazy(() => import("@/pages/animate")),
 };
 
 export default routerPaths;

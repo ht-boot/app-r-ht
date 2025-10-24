@@ -35,11 +35,35 @@ const FileUploader: React.FC = () => {
   };
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.startsWith("image/")) return <ImageIcon />;
-    if (fileType.startsWith("video/")) return <TvMinimalPlay />;
-    if (fileType.startsWith("audio/")) return <Headphones />;
-    if (fileType === "application/pdf") return <FileChartLine />;
-    return <File />;
+    if (fileType.startsWith("image/"))
+      return (
+        <div className="rounded-full box-content p-2 bg-slate-400/50">
+          <ImageIcon className="text-neutral-700" />
+        </div>
+      );
+    if (fileType.startsWith("video/"))
+      return (
+        <div className="rounded-full box-content p-2 bg-slate-400/50">
+          <TvMinimalPlay />
+        </div>
+      );
+    if (fileType.startsWith("audio/"))
+      return (
+        <div className="rounded-full box-content p-2 bg-slate-400/50">
+          <Headphones />
+        </div>
+      );
+    if (fileType === "application/pdf")
+      return (
+        <div className="rounded-full box-content p-2 bg-slate-400/50">
+          <FileChartLine />
+        </div>
+      );
+    return (
+      <div className="rounded-full box-content p-2 bg-slate-400/50">
+        <File />
+      </div>
+    );
   };
 
   // --- State Updaters ---
@@ -274,7 +298,7 @@ const FileUploader: React.FC = () => {
                         }}
                         className="mr-4 ml-4 text-gray-400 hover:text-gray-600 text-2xl font-light"
                       >
-                        <LucideTrash2 size={16} />
+                        <LucideTrash2 size={18} />
                       </button>
                     )}
                   </div>
