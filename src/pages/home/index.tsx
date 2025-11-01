@@ -1,6 +1,13 @@
 import { motion } from "motion/react";
 import RealTimeClock from "./real-time-clock";
+import { useEffect } from "react";
+import { demo } from "@/api/demo";
 const Home = () => {
+  useEffect(() => {
+    demo().then((res) => {
+      console.log(res);
+    });
+  }, []);
   return (
     <div className="home">
       <motion.div
@@ -29,7 +36,7 @@ const Home = () => {
               Hello, Admin.
             </p>
             <p className="text-neutral-500 text-sm ">
-              Welcome back! 这里进行任务跟踪，会是一个很好的选择。
+              Welcome back! 在这里进行任务跟踪，会是一个很好的选择。
             </p>
           </div>
           {/* 日期与时间 */}

@@ -50,7 +50,7 @@ export const MenuItem = ({ items }: { items: RouteType[] }) => {
 
   return items.map((item) => {
     const hasChildren = item.children && item.children.length > 0;
-    const isActive = isMenuActive(item.path, hasChildren as boolean); //  2. 判断是否选中
+    const isActive = isMenuActive(item.path, hasChildren as boolean); //  判断是否选中
     // if (!openMenuMap.includes(item.path) && hasChildren && isActive) {
     //   setOpenMenuMap((prev) => [...new Set([...prev, item.path])]);
     // }
@@ -95,7 +95,7 @@ export const MenuItem = ({ items }: { items: RouteType[] }) => {
               <span className="pl-3">{item.name}</span>
             </SidebarMenuButton>
           )}
-          <CollapsibleContent>
+          <CollapsibleContent className="overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
             <SidebarMenuSub className="p-0 pl-3 m-0">
               {item.children && item.children.length > 0 && (
                 // 递归渲染子菜单

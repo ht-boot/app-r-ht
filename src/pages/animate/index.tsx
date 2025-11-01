@@ -1,10 +1,11 @@
+import Switch from "@/pages/animate/switch";
+import { useState } from "react";
+
 const Animate = () => {
+  const [checked, setChecked] = useState(false);
   return (
     <div className="animate">
-      <h1>Animation</h1>
-      <div className="animate__container">
-        <div className="animate__box"></div>
-      </div>
+      <Switch checked={checked} setChecked={setChecked} />
     </div>
   );
 };

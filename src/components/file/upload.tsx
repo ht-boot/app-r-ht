@@ -8,7 +8,7 @@ import {
   LucideTrash2,
 } from "lucide-react";
 import React, { useState, useRef, useCallback, useMemo } from "react"; // 导入 useMemo
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import success from "@/assets/success.svg";
 import upload from "@/assets/upload.svg";
 
@@ -164,6 +164,7 @@ const FileUploader: React.FC = () => {
 
   const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
+
     if (selectedFiles.length > 0) {
       addFiles(selectedFiles);
     }
@@ -241,101 +242,87 @@ const FileUploader: React.FC = () => {
       {/* 文件列表 */}
       <div className="mt-6">
         <ul className="space-y-3">
-          <AnimatePresence>
-            {files.map((uploadableFile) => (
-              <motion.li
-                key={uploadableFile.id}
-                layout
-                initial={{ opacity: 0, x: -80 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{
-                  opacity: 0,
-                  x: -100,
-                  height: 0,
-                  // ⚠️ 关键动画优化：确保 margin/padding 在退出时归零，以防止按钮跳动
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                  marginTop: 0,
-                  marginBottom: 0,
-                  transition: { duration: 0.2 },
-                }}
-                transition={{ duration: 0.3 }}
-                className="flex items-center p-1 shadow-xl dark:bg-accent border rounded-lg overflow-hidden" // ⚠️ 优化：添加 overflow-hidden 防止内容闪烁
-              >
-                {/* 图标与信息主体 */}
-                <span className="text-2xl mr-2 ml-2">
-                  {getFileIcon(uploadableFile.file.type)}
-                </span>
-                <div className="grow bg-transparent">
-                  {/* 文件名称 与 成功/失败图标 */}
-                  <div className="text-[14px] font-medium truncate flex items-center justify-between">
-                    <p>{uploadableFile.file.name}</p>
-                    {getStatusIcon(uploadableFile)}
-                  </div>
-
-                  {/* 进度条 */}
-                  <div className="flex items-center">
-                    <div className="w-full rounded-full h-1.5 mt-1 mb-1 bg-gray-100 dark:bg-neutral-600">
-                      {(uploadableFile.status === "uploading" ||
-                        uploadableFile.status === "success" ||
-                        uploadableFile.status === "error") && (
-                        <div
-                          className={`h-1.5 rounded-full transition-all duration-300 ease-in-out ${
-                            uploadableFile.status === "error"
-                              ? "bg-rose-800"
-                              : "bg-emerald-500"
-                          } mr-2`}
-                          style={{ width: `${uploadableFile.progress}%` }}
-                        />
-                      )}
-                    </div>
-                    {/* 移除按钮 */}
-                    {uploadableFile.status === "pending" && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); // 阻止父级元素的事件
-                          onRemoveFile(uploadableFile.id);
-                        }}
-                        className="mr-4 ml-4 text-gray-400 hover:text-gray-600 text-2xl font-light"
-                      >
-                        <LucideTrash2 size={18} />
-                      </button>
-                    )}
-                  </div>
-
-                  {/* 文件大小/进度/重试 */}
-                  <div className="flex items-center justify-between">
-                    <p className="text-[12px] text-gray-500 text-nowrap">
-                      {formatFileSize(uploadableFile.file.size)}
-                    </p>
-                    {uploadableFile.status === "error" ? (
-                      <div
-                        className="text-[13px] ml-2 text-rose-800 flex items-center cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onRetryFile(uploadableFile);
-                        }}
-                      >
-                        <p>上传失败，点击重新上传</p>
-                        <RefreshCw size={16} className="ml-1" />
-                      </div>
-                    ) : (
-                      (uploadableFile.status === "uploading" ||
-                        uploadableFile.status === "success") && (
-                        <div className="text-[13px] ml-2 flex items-center">
-                          {uploadableFile.progress}%
-                        </div>
-                      )
-                    )}
-                  </div>
+          {files.map((uploadableFile) => (
+            <motion.li
+              key={uploadableFile.id}
+              layout
+              initial={{ opacity: 0, x: -80 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center p-1 shadow-xl dark:bg-accent border rounded-lg overflow-hidden" // ⚠️ 优化：添加 overflow-hidden 防止内容闪烁
+            >
+              {/* 图标与信息主体 */}
+              <span className="text-2xl mr-2 ml-2">
+                {getFileIcon(uploadableFile.file.type)}
+              </span>
+              <div className="grow bg-transparent">
+                {/* 文件名称 与 成功/失败图标 */}
+                <div className="text-[14px] font-medium truncate flex items-center justify-between">
+                  <p>{uploadableFile.file.name}</p>
+                  {getStatusIcon(uploadableFile)}
                 </div>
-              </motion.li>
-            ))}
-          </AnimatePresence>
-        </ul>
 
+                {/* 进度条 */}
+                <div className="flex items-center">
+                  <div className="w-full rounded-full h-1.5 mt-1 mb-1 bg-gray-100 dark:bg-neutral-600">
+                    {(uploadableFile.status === "uploading" ||
+                      uploadableFile.status === "success" ||
+                      uploadableFile.status === "error") && (
+                      <div
+                        className={`h-1.5 rounded-full transition-all duration-300 ease-in-out ${
+                          uploadableFile.status === "error"
+                            ? "bg-rose-800"
+                            : "bg-emerald-500"
+                        } mr-2`}
+                        style={{ width: `${uploadableFile.progress}%` }}
+                      />
+                    )}
+                  </div>
+                  {/* 移除按钮 */}
+                  {uploadableFile.status === "pending" && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation(); // 阻止父级元素的事件
+                        onRemoveFile(uploadableFile.id);
+                      }}
+                      className="mr-4 ml-4 text-gray-400 hover:text-gray-600 text-2xl font-light"
+                    >
+                      <LucideTrash2 size={18} />
+                    </button>
+                  )}
+                </div>
+
+                {/* 文件大小/进度/重试 */}
+                <div className="flex items-center justify-between">
+                  <p className="text-[12px] text-gray-500 text-nowrap">
+                    {formatFileSize(uploadableFile.file.size)}
+                  </p>
+                  {uploadableFile.status === "error" ? (
+                    <div
+                      className="text-[13px] ml-2 text-rose-800 flex items-center cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRetryFile(uploadableFile);
+                      }}
+                    >
+                      <p>上传失败，点击重新上传</p>
+                      <RefreshCw size={16} className="ml-1" />
+                    </div>
+                  ) : (
+                    (uploadableFile.status === "uploading" ||
+                      uploadableFile.status === "success") && (
+                      <div className="text-[13px] ml-2 flex items-center">
+                        {uploadableFile.progress}%
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
         {files.length > 0 && (
-          <div className="flex items-center">
+          <motion.div layout className="flex items-center">
             <button
               onClick={() => onUpload(files)}
               disabled={!hasPendingFiles || isUploading}
@@ -350,7 +337,7 @@ const FileUploader: React.FC = () => {
             >
               关闭
             </button>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

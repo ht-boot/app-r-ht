@@ -48,13 +48,13 @@ const RealTimeClock: React.FC<RealTimeClockProps> = ({
       className="real-time-clock"
       style={{ fontFamily: "Arial, sans-serif" }}
     >
-      <p className="text-4xl font-bold text-neutral-700 dark:text-neutral-300">
+      <div className="text-4xl font-bold text-neutral-700 dark:text-neutral-300">
         {formattedTime}
-      </p>
-      <p className="flex gap-1 mt-1">
+      </div>
+      <div className="flex gap-1 mt-1">
         <p className="text-sm text-gray-500">{fullDate}</p>
         <CalendarDays className="text-gray-500" size={18} />
-      </p>
+      </div>
     </div>
   );
 };

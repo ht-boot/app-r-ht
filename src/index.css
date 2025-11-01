@@ -143,3 +143,9 @@ body {
   /* 关闭默认动画，否则影响自定义动画的执行 */
   animation: none;
 }
+[data-sonner-toast][data-styled="true"] [data-button] {
+  /* 覆盖基础样式中的 background: var(--normal-text); */
+  background: transparent !important;
+  color: var(--color-gray-600) !important;
+  padding: 0 !important;
+}

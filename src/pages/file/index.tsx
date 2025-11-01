@@ -15,6 +15,9 @@ const FileUpload = () => {
       </div>
       <div className="file-upload-container">
         <Upload />
+        <div>
+          文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试
+        </div>
       </div>
     </>
   );
